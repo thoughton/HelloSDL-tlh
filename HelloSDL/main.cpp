@@ -92,10 +92,11 @@ int SDL_main (int argc, char **argv) {
                     // ## INSERT CODE TO HANDLE ANY OTHER EVENTS HERE ##
             }
         }
-        
+                
         // Check for escape
-        Uint8 *keys = SDL_GetKeyState(NULL);
-        if( keys[SDLK_ESCAPE] ) {
+        Uint8 *keys = SDL_GetKeyboardState(NULL);
+        if ( keys[SDL_SCANCODE_ESCAPE] )
+        {
             done = true;
         }
         
@@ -104,8 +105,6 @@ int SDL_main (int argc, char **argv) {
         
         SDL_GL_SwapBuffers();
     }
-    
-    
     
     SDL_Quit();
     return 0;

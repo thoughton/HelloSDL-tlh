@@ -12,7 +12,6 @@
 		9C93E3A613942B5A0096FAB3 /* Credits.rtf in Resources */ = {isa = PBXBuildFile; fileRef = 9C93E3A413942B5A0096FAB3 /* Credits.rtf */; };
 		9C93E3A913942B5A0096FAB3 /* HelloSDLAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C93E3A813942B5A0096FAB3 /* HelloSDLAppDelegate.m */; };
 		9C93E3AC13942B5A0096FAB3 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9C93E3AA13942B5A0096FAB3 /* MainMenu.xib */; };
-		9C93E3B313942B700096FAB3 /* SDL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93E3B213942B700096FAB3 /* SDL.framework */; };
 		9C93E3B613942C360096FAB3 /* SDLMain.m in Sources */ = {isa = PBXBuildFile; fileRef = 9C93E3B513942C360096FAB3 /* SDLMain.m */; };
 		9C93E3B913942C790096FAB3 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9C93E3B713942C790096FAB3 /* main.cpp */; };
 		9C93E3BB13942F620096FAB3 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9C93E3BA13942F620096FAB3 /* OpenGL.framework */; };
@@ -31,7 +30,6 @@
 		9C93E3A713942B5A0096FAB3 /* HelloSDLAppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HelloSDLAppDelegate.h; sourceTree = "<group>"; };
 		9C93E3A813942B5A0096FAB3 /* HelloSDLAppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = HelloSDLAppDelegate.m; sourceTree = "<group>"; };
 		9C93E3AB13942B5A0096FAB3 /* en */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = en; path = en.lproj/MainMenu.xib; sourceTree = "<group>"; };
-		9C93E3B213942B700096FAB3 /* SDL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL.framework; path = Library/Frameworks/SDL.framework; sourceTree = SDKROOT; };
 		9C93E3B413942C360096FAB3 /* SDLMain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SDLMain.h; path = ../SDLMain.h; sourceTree = "<group>"; };
 		9C93E3B513942C360096FAB3 /* SDLMain.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SDLMain.m; path = ../SDLMain.m; sourceTree = "<group>"; };
 		9C93E3B713942C790096FAB3 /* main.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -45,7 +43,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C93E3BB13942F620096FAB3 /* OpenGL.framework in Frameworks */,
-				9C93E3B313942B700096FAB3 /* SDL.framework in Frameworks */,
 				9C93E39613942B5A0096FAB3 /* Cocoa.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -74,7 +71,6 @@
 		9C93E39413942B5A0096FAB3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				9C93E3B213942B700096FAB3 /* SDL.framework */,
 				9C93E39513942B5A0096FAB3 /* Cocoa.framework */,
 				9C93E39713942B5A0096FAB3 /* Other Frameworks */,
 			);
@@ -119,6 +115,7 @@
 				9C93E38D13942B5A0096FAB3 /* Sources */,
 				9C93E38E13942B5A0096FAB3 /* Frameworks */,
 				9C93E38F13942B5A0096FAB3 /* Resources */,
+				16D7F72514BAD73B007B94C6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -135,6 +132,7 @@
 		9C93E38813942B590096FAB3 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = Student;
 			};
 			buildConfigurationList = 9C93E38B13942B590096FAB3 /* Build configuration list for PBXProject "HelloSDL" */;
@@ -166,6 +164,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		16D7F72514BAD73B007B94C6 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# These *should* be the only vars that are configurable by the user, #\n# but even these should be ok left alone in most cases.              #\nDYLIBBASE=\"libSDL\"\nDESTCONTENTSSUBDIR=\"Libraries\"\n######################################################################\n\nTARGETCONTENTS=\"$TARGET_BUILD_DIR/$TARGET_NAME.app/Contents\"\n\nEMBEDDEDLIBPATH=`otool -L \"$TARGETCONTENTS/MacOS/$PRODUCT_NAME\" | grep -m1 \"$DYLIBBASE\" | awk '{ print $1 }'`\n\nif [ -z \"$EMBEDDEDLIBPATH\" ]\nthen\n    echo \"BUILD SCRIPT ERROR: Could not find '$DYLIBBASE' library referenced in '$PRODUCT_NAME' Mach-O binary.\"\n    exit 1\nfi\n\nif [ ${EMBEDDEDLIBPATH:0:1} = \"@\" ]\nthen\n    # looks like the path to the lib has already been fixed-up (this is probably a rebuild) so we can successfully exit this script here \n    exit 0\nfi\n\nif [ ! -r $EMBEDDEDLIBPATH ]\nthen\n    echo \"BUILD SCRIPT ERROR: Could not read file '$EMBEDDEDLIBPATH' referenced from '$PRODUCT_NAME' Mach-O binary as '$DYLIBBASE' library.\"\n    exit 1\nfi\n\nDYLIB=\"$DYLIBBASE.dylib\"\nCOPYDEST=\"$TARGETCONTENTS/$DESTCONTENTSSUBDIR\"\n\nmkdir -p \"$COPYDEST\"\ncp -f \"$EMBEDDEDLIBPATH\" \"$COPYDEST/$DYLIB\"\n\ninstall_name_tool -change \"$EMBEDDEDLIBPATH\" @loader_path/../$DESTCONTENTSSUBDIR/$DYLIB \"$TARGETCONTENTS/MacOS/$PRODUCT_NAME\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		9C93E38D13942B5A0096FAB3 /* Sources */ = {
@@ -223,6 +237,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../local/include\"";
 			};
 			name = Debug;
 		};
@@ -237,19 +252,25 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				SDKROOT = macosx;
+				USER_HEADER_SEARCH_PATHS = "\"$(SRCROOT)/../../../../local/include\"";
 			};
 			name = Release;
 		};
 		9C93E3B013942B5A0096FAB3 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloSDL/HelloSDL-Prefix.pch";
 				INFOPLIST_FILE = "HelloSDL/HelloSDL-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../local/lib\"",
+				);
+				OTHER_LDFLAGS = "-lSDL";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -258,13 +279,18 @@
 		9C93E3B113942B5A0096FAB3 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_ENABLE_OBJC_EXCEPTIONS = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "HelloSDL/HelloSDL-Prefix.pch";
 				INFOPLIST_FILE = "HelloSDL/HelloSDL-Info.plist";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"\"$(SRCROOT)/../../../../local/lib\"",
+				);
+				OTHER_LDFLAGS = "-lSDL";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
 			};
@@ -289,6 +315,7 @@
 				9C93E3B113942B5A0096FAB3 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

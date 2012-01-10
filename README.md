@@ -20,9 +20,9 @@ The reasons for the change to dylibs, and for this fork's existence in general, 
 To be able to build this code after initial git cloning, you should only need to alter the following two settings in the Target's Build Settings within Xcode:
 
  
- A. Add to the "Header Search Paths" setting: the directory that contains the "SDL" sub-directory that contains your SDL headers (SDL.h, etc.)
+ 1. Add to the "Header Search Paths" setting: the directory that contains the "SDL" sub-directory that contains your SDL headers (SDL.h, etc.)
 
- B. Add to the "Library Search Paths" setting: the directory that contains the "SDL" sub-directory that contains your SDL libraries (libSDL.dylib, etc.)
+ 2. Add to the "Library Search Paths" setting: the directory that contains the "SDL" sub-directory that contains your SDL libraries (libSDL.dylib, etc.)
 
 
 And that's it. At this point the project should compile without a hitch, and the resulting app should be redistributable and relocatable without a problem.
